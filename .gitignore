@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+*.so
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project data (not tracked)
+database/*.db
+data/
+*.fasta
+*.aln
+*.treefile
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Conda
+*.conda/
