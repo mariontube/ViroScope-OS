@@ -1,6 +1,7 @@
 """CLI entry point — `viroscope` command with subcommands."""
 
 import argparse
+import json
 import sys
 from pathlib import Path
 
@@ -25,10 +26,22 @@ def cmd_run(args):
         print(f"Available: {', '.join(sorted(plugins))}" if plugins else "None")
         sys.exit(1)
 
-    result = run_plugin(plugins[args.plugin], args.input)
+    # Load config from file if specified
+    config = {}
+    if args.config:
+        cfg = load_config(args.config)
+        for section in cfg.sections():
+            config.update({k: v for k, v in cfg[section].items()})
+    # CLI overrides
+    if args.dataset:
+        config["dataset"] = args.dataset
+
+    result = run_plugin(plugins[args.plugin], args.input, config)
     if result.ok:
         if result.data is not None:
-            print(result.data)
+            # Print JSON report nicely, skip raw output dir
+            report = result.data.get("report", result.data)
+            print(json.dumps(report, indent=2, ensure_ascii=False))
     else:
         for e in result.errors:
             print(f"ERROR: {e}")
@@ -46,7 +59,7 @@ def cmd_config(args):
 
 def main():
     parser = argparse.ArgumentParser(prog="viroscope", description="ViroScope OS CLI")
-    parser.add_argument("--version", action="version", version="0.1.0")
+    parser.add_argument("--version", action="version", version="0.2.1")
     sub = parser.add_subparsers(dest="command")
 
     sub.add_parser("list", help="List all plugins")
@@ -54,6 +67,8 @@ def main():
     p_run = sub.add_parser("run", help="Run a plugin")
     p_run.add_argument("plugin", help="Plugin name")
     p_run.add_argument("input", nargs="?", help="Input data (file path or string)")
+    p_run.add_argument("--dataset", "-d", help="Dataset name (for nextclade, etc.)")
+    p_run.add_argument("--config", "-c", help="Config file name (from configs/)")
 
     p_cfg = sub.add_parser("config", help="Show config")
     p_cfg.add_argument("name", nargs="?", default="viroscope", help="Config name")
