@@ -1,0 +1,15 @@
+README.md
+pyproject.toml
+src/viroscope/__init__.py
+src/viroscope/cli.py
+src/viroscope.egg-info/PKG-INFO
+src/viroscope.egg-info/SOURCES.txt
+src/viroscope.egg-info/dependency_links.txt
+src/viroscope.egg-info/entry_points.txt
+src/viroscope.egg-info/top_level.txt
+src/viroscope/core/__init__.py
+src/viroscope/core/config.py
+src/viroscope/core/loader.py
+src/viroscope/core/plugin.py
+src/viroscope/plugins/__init__.py
+src/viroscope/plugins/qc.py

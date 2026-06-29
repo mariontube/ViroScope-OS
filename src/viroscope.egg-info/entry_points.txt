@@ -1,0 +1,2 @@
+[console_scripts]
+viroscope = viroscope.cli:main
